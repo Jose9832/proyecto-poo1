@@ -1,8 +1,11 @@
 package com.cooperativa.taxi.model;
 
+import java.io.Serializable;
+
 import com.cooperativa.taxi.exception.DatosInvalidosException;
 
-public class Pasajero {
+public class Pasajero implements Serializable{
+    private static final long serialVersionUID = 1L;
     private final String nombre;
     private final String direccion;
     private final String telefono;

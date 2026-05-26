@@ -1,9 +1,12 @@
 package com.cooperativa.taxi.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Solicitud {
+
+public class Solicitud implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     private final int id;

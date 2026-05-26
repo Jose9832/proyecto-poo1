@@ -9,13 +9,14 @@ import com.cooperativa.taxi.model.Solicitud;
 import com.cooperativa.taxi.model.TipoServicio;
 import com.cooperativa.taxi.model.Vehiculo;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ArchivoSolicitudRepository implements SolicitudRepository {
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -25,6 +26,37 @@ public class ArchivoSolicitudRepository implements SolicitudRepository {
     public ArchivoSolicitudRepository(Path archivo) {
         this.archivo = archivo;
         this.factory = new ServicioTaxiFactory();
+    }
+
+    // Cambiamos el .csv por .dat para indicar que son datos binarios serializados
+    private static final String ARCHIVO = "data/historial_solicitudes.dat";
+
+    public void guardarSolicitud(Solicitud solicitud) {
+        List<Solicitud> historial = obtenerTodas();
+        historial.add(solicitud);
+        guardarTodo(historial);
+    }
+
+    private void guardarTodo(List<Solicitud> historial) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO))) {
+            oos.writeObject(historial);
+        } catch (IOException e) {
+            System.err.println("Error al serializar el historial: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Solicitud> obtenerTodas() {
+        File file = new File(ARCHIVO);
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARCHIVO))) {
+            return (List<Solicitud>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error al deserializar el historial: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     @Override
@@ -37,7 +69,7 @@ public class ArchivoSolicitudRepository implements SolicitudRepository {
                     .skip(1)
                     .filter(linea -> !linea.isBlank())
                     .map(this::desdeCsv)
-                    .toList();
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             throw new IllegalStateException("No fue posible cargar el historial: " + e.getMessage(), e);
         }
@@ -49,10 +81,11 @@ public class ArchivoSolicitudRepository implements SolicitudRepository {
             if (archivo.getParent() != null) {
                 Files.createDirectories(archivo.getParent());
             }
-            List<String> lineas = new ArrayList<>(solicitudes.stream()
+            List<String> lineas = new ArrayList<>();
+            lineas.add("id;fecha;pasajero;direccion;telefono;tipo;distanciaKm;estado;conductor;placa;costo");
+            solicitudes.stream()
                     .map(Solicitud::toCsv)
-                    .toList());
-            lineas.addFirst("id;fecha;pasajero;direccion;telefono;tipo;distanciaKm;estado;conductor;placa;costo");
+                    .forEach(lineas::add);
             Files.write(archivo, lineas);
         } catch (IOException e) {
             throw new IllegalStateException("No fue posible guardar el historial: " + e.getMessage(), e);

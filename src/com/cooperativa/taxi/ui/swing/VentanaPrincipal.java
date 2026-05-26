@@ -3,6 +3,7 @@ package com.cooperativa.taxi.ui.swing;
 import com.cooperativa.taxi.app.GestorSolicitudes;
 import com.cooperativa.taxi.exception.ConductorNoDisponibleException;
 import com.cooperativa.taxi.exception.DatosInvalidosException;
+import com.cooperativa.taxi.exception.RutaBloqueadaException;
 import com.cooperativa.taxi.exception.SolicitudNoEncontradaException;
 import com.cooperativa.taxi.model.Conductor;
 import com.cooperativa.taxi.model.Solicitud;
@@ -270,7 +271,9 @@ public class VentanaPrincipal extends JFrame {
             limpiarFormulario();
             refrescarTablas();
             mostrarEstado("Solicitud #" + solicitud.getId() + " registrada en espera.");
-        } catch (RuntimeException e) {
+        } catch (RutaBloqueadaException e) {
+            mostrarError(e);
+        } catch (Exception e) { // <-- Cambio clave aquí para atrapar todo
             mostrarError(e);
         }
     }
@@ -280,7 +283,7 @@ public class VentanaPrincipal extends JFrame {
             Solicitud solicitud = gestor.atenderSiguiente();
             refrescarTablas();
             mostrarEstado("Solicitud #" + solicitud.getId() + " asignada a " + solicitud.getConductor().getNombre() + ".");
-        } catch (RuntimeException e) {
+        } catch (Exception e) { // <-- Cambio clave aquí
             mostrarError(e);
         }
     }
@@ -294,7 +297,7 @@ public class VentanaPrincipal extends JFrame {
             gestor.finalizarSolicitud(id);
             refrescarTablas();
             mostrarEstado("Solicitud #" + id + " finalizada.");
-        } catch (RuntimeException e) {
+        } catch (Exception e) { // <-- Cambio clave aquí
             mostrarError(e);
         }
     }
@@ -308,7 +311,7 @@ public class VentanaPrincipal extends JFrame {
             gestor.cancelarSolicitud(id);
             refrescarTablas();
             mostrarEstado("Solicitud #" + id + " cancelada.");
-        } catch (RuntimeException e) {
+        } catch (Exception e) { // <-- Cambio clave aquí
             mostrarError(e);
         }
     }
@@ -382,11 +385,13 @@ public class VentanaPrincipal extends JFrame {
         estadoLabel.setText(mensaje);
     }
 
-    private void mostrarError(RuntimeException e) {
+    // Este es el método que causaba el conflicto, ahora acepta cualquier Exception
+    private void mostrarError(Exception e) {
         String mensaje = e.getMessage() == null ? "Operacion no completada." : e.getMessage();
         if (e instanceof DatosInvalidosException
                 || e instanceof SolicitudNoEncontradaException
-                || e instanceof ConductorNoDisponibleException) {
+                || e instanceof ConductorNoDisponibleException
+                || e instanceof RutaBloqueadaException) {
             JOptionPane.showMessageDialog(this, mensaje, "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);

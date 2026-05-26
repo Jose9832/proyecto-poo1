@@ -1,6 +1,9 @@
 package com.cooperativa.taxi.model;
 
-public abstract class ServicioTaxi {
+import java.io.Serializable;
+
+public abstract class ServicioTaxi implements Serializable{
+    private static final long serialVersionUID = 1L;
     private final TipoServicio tipoServicio;
 
     protected ServicioTaxi(TipoServicio tipoServicio) {

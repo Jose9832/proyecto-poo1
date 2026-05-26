@@ -3,6 +3,7 @@ package com.cooperativa.taxi.ui;
 import com.cooperativa.taxi.app.GestorSolicitudes;
 import com.cooperativa.taxi.exception.ConductorNoDisponibleException;
 import com.cooperativa.taxi.exception.DatosInvalidosException;
+import com.cooperativa.taxi.exception.RutaBloqueadaException;
 import com.cooperativa.taxi.exception.SolicitudNoEncontradaException;
 import com.cooperativa.taxi.model.Conductor;
 import com.cooperativa.taxi.model.Solicitud;
@@ -70,8 +71,14 @@ public class Consola {
         String telefono = scanner.nextLine();
         TipoServicio tipo = leerTipoServicio();
         double distancia = leerDouble("Distancia estimada en km: ");
-        Solicitud solicitud = gestor.registrarSolicitud(nombre, direccion, telefono, tipo, distancia);
-        System.out.println("Solicitud registrada: " + solicitud.resumen());
+        try {
+            Solicitud solicitud = gestor.registrarSolicitud(nombre, direccion, telefono, tipo, distancia);
+            System.out.println("Solicitud registrada: " + solicitud.resumen());
+        } catch (DatosInvalidosException | ConductorNoDisponibleException | RutaBloqueadaException e) {
+            System.out.println("Aviso: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void listarEspera() {
@@ -84,20 +91,32 @@ public class Consola {
     }
 
     private void atenderSiguiente() {
-        Solicitud solicitud = gestor.atenderSiguiente();
-        System.out.println("Solicitud asignada: " + solicitud.resumen());
+        try {
+            Solicitud solicitud = gestor.atenderSiguiente();
+            System.out.println("Solicitud asignada: " + solicitud.resumen());
+        } catch (SolicitudNoEncontradaException | ConductorNoDisponibleException e) {
+            System.out.println("Aviso: " + e.getMessage());
+        }
     }
 
     private void finalizarSolicitud() {
         int id = leerEntero("Id de la solicitud a finalizar: ");
-        gestor.finalizarSolicitud(id);
-        System.out.println("Solicitud finalizada.");
+        try {
+            gestor.finalizarSolicitud(id);
+            System.out.println("Solicitud finalizada.");
+        } catch (SolicitudNoEncontradaException e) {
+            System.out.println("Aviso: " + e.getMessage());
+        }
     }
 
     private void cancelarSolicitud() {
         int id = leerEntero("Id de la solicitud a cancelar: ");
-        gestor.cancelarSolicitud(id);
-        System.out.println("Solicitud cancelada.");
+        try {
+            gestor.cancelarSolicitud(id);
+            System.out.println("Solicitud cancelada.");
+        } catch (SolicitudNoEncontradaException e) {
+            System.out.println("Aviso: " + e.getMessage());
+        }
     }
 
     private void listarHistorial() {
@@ -122,13 +141,13 @@ public class Consola {
     private TipoServicio leerTipoServicio() {
         System.out.println("Tipo de servicio:");
         System.out.println("1. Taxi estandar");
-        System.out.println("2. Taxi compartido");
-        System.out.println("3. Taxi de carga");
+        System.out.println("2. Taxi de carga (Baul/Parrilla)");
+        System.out.println("3. Taxi para mascotas"); // Se actualizó el menú
         int opcion = leerEntero("Seleccione tipo: ");
         return switch (opcion) {
             case 1 -> TipoServicio.ESTANDAR;
-            case 2 -> TipoServicio.COMPARTIDO;
-            case 3 -> TipoServicio.CARGA;
+            case 2 -> TipoServicio.CARGA;
+            case 3 -> TipoServicio.MASCOTAS; // Se actualizó el switch
             default -> throw new DatosInvalidosException("Tipo de servicio no valido.");
         };
     }
@@ -137,8 +156,7 @@ public class Consola {
         while (true) {
             try {
                 System.out.print(mensaje);
-                int valor = Integer.parseInt(scanner.nextLine());
-                return valor;
+                return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Ingrese un numero entero valido.");
             }

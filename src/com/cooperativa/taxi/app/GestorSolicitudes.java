@@ -1,6 +1,7 @@
 package com.cooperativa.taxi.app;
 
 import com.cooperativa.taxi.exception.ConductorNoDisponibleException;
+import com.cooperativa.taxi.exception.RutaBloqueadaException;
 import com.cooperativa.taxi.exception.SolicitudNoEncontradaException;
 import com.cooperativa.taxi.factory.ServicioTaxiFactory;
 import com.cooperativa.taxi.model.Conductor;
@@ -19,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class GestorSolicitudes {
     private final ServicioTaxiFactory factory;
@@ -58,7 +60,13 @@ public class GestorSolicitudes {
                 .orElse(0) + 1;
     }
 
-    public Solicitud registrarSolicitud(String nombre, String direccion, String telefono, TipoServicio tipo, double distanciaKm) {
+    public Solicitud registrarSolicitud(String nombre, String direccion, String telefono, TipoServicio tipo, double distanciaKm) throws RutaBloqueadaException {
+        
+        // Simulación de cierre vial (requisito del proyecto)
+        if (direccion.toLowerCase().contains("calle 30") || direccion.toLowerCase().contains("centro")) {
+            throw new RutaBloqueadaException("Servicio denegado: La ruta hacia/desde '" + direccion + "' se encuentra bloqueada.");
+        }
+
         Pasajero pasajero = new Pasajero(nombre, direccion, telefono);
         ServicioTaxi servicio = factory.crear(tipo);
         Solicitud solicitud = new Solicitud(consecutivo++, pasajero, servicio, distanciaKm);
@@ -71,13 +79,13 @@ public class GestorSolicitudes {
     public List<Solicitud> listarEnEspera() {
         return colaEspera.stream()
                 .filter(solicitud -> solicitud.getEstado() == EstadoSolicitud.EN_ESPERA)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public List<Solicitud> listarHistorial() {
         return historial.stream()
                 .sorted(Comparator.comparing(Solicitud::getId))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public Solicitud atenderSiguiente() {

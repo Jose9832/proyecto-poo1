@@ -1,6 +1,9 @@
 package com.cooperativa.taxi.model;
 
-public class Conductor {
+import java.io.Serializable;
+
+public class Conductor implements Serializable{
+    private static final long serialVersionUID = 1L;
     private final String nombre;
     private final Vehiculo vehiculo;
     private boolean disponible;
