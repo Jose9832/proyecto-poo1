@@ -1,0 +1,7 @@
+package com.cooperativa.taxi.exception;
+
+public class DatosInvalidosException extends RuntimeException {
+    public DatosInvalidosException(String message) {
+        super(message);
+    }
+}
