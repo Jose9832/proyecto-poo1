@@ -1,106 +1,86 @@
-# Diseno UML
+@startuml
+skinparam classAttributeIconSize 0
 
-## Diagrama de clases
+abstract class ServicioTaxi {
+    - tipo: TipoServicio
+    + {abstract} factorTarifa(): double
+    + {abstract} descripcion(): String
+}
 
-```mermaid
-classDiagram
-    class Main
-    class Consola
-    class GestorSolicitudes {
-        -Queue~Solicitud~ colaEspera
-        -List~Solicitud~ historial
-        -List~Conductor~ conductores
-        +registrarSolicitud()
-        +atenderSiguiente()
-        +finalizarSolicitud()
-        +cancelarSolicitud()
-    }
+class ServicioEstandar {
+    + factorTarifa(): double
+    + descripcion(): String
+}
 
-    class Solicitud {
-        -int id
-        -Pasajero pasajero
-        -ServicioTaxi servicio
-        -EstadoSolicitud estado
-        -Conductor conductor
-        -double costo
-        +asignar()
-        +finalizar()
-        +cancelar()
-    }
+class ServicioCarga {
+    + factorTarifa(): double
+    + descripcion(): String
+}
 
-    class Pasajero
-    class Conductor
-    class Vehiculo
-    class ServicioTaxi {
-        <<abstract>>
-        +factorTarifa() double
-        +descripcion() String
-    }
-    class ServicioEstandar
-    class ServicioCompartido
-    class ServicioCarga
-    class ServicioTaxiFactory {
-        +crear(TipoServicio) ServicioTaxi
-    }
-    class TarifaStrategy {
-        <<interface>>
-        +calcular(ServicioTaxi, double) double
-    }
-    class TarifaEstandarStrategy
-    class SolicitudRepository {
-        <<interface>>
-        +guardar(List~Solicitud~)
-    }
-    class ArchivoSolicitudRepository
+class ServicioMascotas {
+    + factorTarifa(): double
+    + descripcion(): String
+}
 
-    Main --> GestorSolicitudes
-    Main --> Consola
-    Consola --> GestorSolicitudes
-    GestorSolicitudes --> Solicitud
-    GestorSolicitudes --> Conductor
-    GestorSolicitudes --> ServicioTaxiFactory
-    GestorSolicitudes --> TarifaStrategy
-    GestorSolicitudes --> SolicitudRepository
-    Solicitud --> Pasajero
-    Solicitud --> ServicioTaxi
-    Solicitud --> Conductor
-    Conductor --> Vehiculo
-    ServicioTaxi <|-- ServicioEstandar
-    ServicioTaxi <|-- ServicioCompartido
-    ServicioTaxi <|-- ServicioCarga
-    TarifaStrategy <|.. TarifaEstandarStrategy
-    SolicitudRepository <|.. ArchivoSolicitudRepository
-```
+class Solicitud {
+    - id: int
+    - distanciaKm: double
+    - costo: double
+    - estado: EstadoSolicitud
+    + finalizar(): void
+    + asignar(con: Conductor, costo: double): void
+}
 
-## Diagrama de secuencia: atencion de solicitud
+class Conductor {
+    - nombre: String
+    - disponible: boolean
+    + asignar(): void
+}
 
-```mermaid
-sequenceDiagram
-    actor Usuario
-    participant Consola
-    participant Gestor as GestorSolicitudes
-    participant Factory as ServicioTaxiFactory
-    participant Tarifa as TarifaStrategy
-    participant Repo as SolicitudRepository
+class Vehiculo {
+    - placa: String
+    - modelo: String
+}
 
-    Usuario->>Consola: registra datos de solicitud
-    Consola->>Gestor: registrarSolicitud(...)
-    Gestor->>Factory: crear(tipoServicio)
-    Factory-->>Gestor: ServicioTaxi
-    Gestor->>Repo: guardar(historial)
-    Usuario->>Consola: atender siguiente
-    Consola->>Gestor: atenderSiguiente()
-    Gestor->>Tarifa: calcular(servicio, distancia)
-    Tarifa-->>Gestor: costo
-    Gestor->>Repo: guardar(historial)
-    Gestor-->>Consola: solicitud asignada
-```
+class GestorSolicitudes {
+    - colaEspera: Queue<Solicitud>
+    - historial: List<Solicitud>
+    - conductores: List<Conductor>
+    + registrarSolicitud(n: String, d: String, t: String, tipo: TipoServicio, dist: double): Solicitud
+    + atenderSiguiente(): Solicitud
+    + finalizarSolicitud(id: int): void
+}
 
-## Casos de uso principales
+class ServicioTaxiFactory {
+    + crear(tipo: TipoServicio): ServicioTaxi
+}
 
-- Registrar solicitud.
-- Consultar solicitudes en espera.
-- Atender solicitud y asignar conductor.
-- Cancelar solicitud en espera.
-- Finalizar servicio.
-- Consultar historial.
+class RutaBloqueadaException
+class ConductorNoDisponibleException
+class DatosInvalidosException
+
+enum TipoServicio {
+    ESTANDAR
+    CARGA
+    MASCOTAS
+}
+
+ServicioTaxi <|-- ServicioEstandar
+ServicioTaxi <|-- ServicioCarga
+ServicioTaxi <|-- ServicioMascotas
+
+GestorSolicitudes --> ServicioTaxiFactory
+GestorSolicitudes o-- Conductor
+GestorSolicitudes o-- Solicitud
+
+Solicitud o-- ServicioTaxi
+Solicitud o-- Conductor
+
+Conductor *-- Vehiculo
+Vehiculo --> TipoServicio
+
+GestorSolicitudes ..> RutaBloqueadaException
+GestorSolicitudes ..> ConductorNoDisponibleException
+GestorSolicitudes ..> DatosInvalidosException
+
+@enduml
