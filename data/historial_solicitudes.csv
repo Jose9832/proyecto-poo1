@@ -5,3 +5,4 @@ id;fecha;pasajero;direccion;telefono;tipo;distanciaKm;estado;conductor;placa;cos
 4;2026-05-26 22:03;Juan Peres;bastidas;3144589634;MASCOTAS;8.0;FINALIZADA;Carlos Ruiz;TAX-202;31250
 5;2026-05-26 22:05;Pepe;almendro;312587469;CARGA;8.0;FINALIZADA;Laura Perez;TAX-101;33750
 6;2026-05-26 22:29;Ernesto;Venezuela;3125896354;CARGA;8.5;ASIGNADA;Marta Diaz;CAR-303;35438
+7;2026-05-27 10:15;Maria Gonzalez;Avenida Bolivar #45-67;3109876543;ESTANDAR;6.2;FINALIZADA;Carlos Ruiz;TAX-202;22250
