@@ -66,7 +66,12 @@ public class GestorSolicitudes {
     public Solicitud registrarSolicitud(String nombre, String direccion, String telefono, TipoServicio tipo, double distanciaKm) throws RutaBloqueadaException {
         
         // Simulación de cierre vial (requisito del proyecto)
-        if (direccion.toLowerCase().contains("calle 30") || direccion.toLowerCase().contains("centro")) {
+        String direccionMinuscula = direccion.toLowerCase();
+        if (direccionMinuscula.contains("calle 30")
+                || direccionMinuscula.contains("centro")
+                || direccionMinuscula.contains("libano")
+                || direccionMinuscula.contains("gaira")
+                || direccionMinuscula.contains("bahia concha")) {
             throw new RutaBloqueadaException("Servicio denegado: La ruta hacia/desde '" + direccion + "' se encuentra bloqueada.");
         }
 
