@@ -33,7 +33,6 @@ El sistema modela una cooperativa de taxis que recibe solicitudes de pasajeros, 
 - `src/com/cooperativa/taxi/model`: entidades del dominio.
 - `src/com/cooperativa/taxi/factory/ServicioTaxiFactory.java`: patron Factory.
 - `src/com/cooperativa/taxi/pricing/TarifaStrategy.java`: patron Strategy.
-- `src/com/cooperativa/taxi/Facade/GestorSolicitudes`
 - `src/com/cooperativa/taxi/repository/ArchivoSolicitudRepository.java`: persistencia.
 - `src/com/cooperativa/taxi/ui/Consola.java`: menu interactivo.
 - `src/com/cooperativa/taxi/ui/swing/VentanaPrincipal.java`: interfaz grafica Swing/JFrame.
@@ -47,11 +46,12 @@ java -cp out com.cooperativa.taxi.Main
 "Nota: Para sistemas basados en Unix (Linux/macOS), utilice javac -d out src/com/cooperativa/taxi/*.java y java -cp out com.cooperativa.taxi.Main."
 ```
 
-
 ## Equipo de trabajo
+
 ```
 - José Luis Meza Quintana
 - Harold Dil Anthony Peñaranda 
 - Aidan Loaiza 
--Juan Diego Agamez 
+- Juan Diego Agamez 
 ```
+
