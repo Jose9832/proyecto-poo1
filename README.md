@@ -17,7 +17,7 @@ Proyecto final de Programacion Orientada a Objetos.
 ## Tipos de servicio
 
 - Taxi estandar.
-- Taxi compartido.
+- Taxi mascotas.
 - Taxi de carga.
 
 ## Patron de diseno aplicado
@@ -64,3 +64,4 @@ src/com/cooperativa/taxi
     |-- swing
 ```
 ![alt text](image.png)
+![alt text](image-1.png)

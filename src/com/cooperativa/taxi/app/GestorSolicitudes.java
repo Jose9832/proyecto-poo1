@@ -45,8 +45,10 @@ public class GestorSolicitudes {
         conductores.add(new Conductor("Laura Perez", new Vehiculo("TAX-101", "Kia Picanto", TipoServicio.ESTANDAR)));
         conductores.add(new Conductor("Carlos Ruiz", new Vehiculo("TAX-202", "Hyundai i10", TipoServicio.MASCOTAS)));
         conductores.add(new Conductor("Marta Diaz", new Vehiculo("CAR-303", "Renault Kangoo", TipoServicio.CARGA)));
-        conductores.add(new Conductor("Laura Perez", new Vehiculo("TAX-101", "Kia Picanto", TipoServicio.CARGA)));
+        conductores.add(new Conductor("Goku fase 3", new Vehiculo("TAX-107", "Mazda 3", TipoServicio.MASCOTAS)));
         conductores.add(new Conductor("Andres Vega", new Vehiculo("TAX-404", "Chevrolet Spark", TipoServicio.ESTANDAR)));
+        conductores.add(new Conductor("Fernando", new Vehiculo("TAX-987", "Camaro 2018", TipoServicio.CARGA)));
+        conductores.add(new Conductor("Felipe ronaldo", new Vehiculo("TAX-745", "Toyota corolla", TipoServicio.CARGA)));
         List<Solicitud> solicitudesGuardadas = repository.cargar();
         historial.addAll(solicitudesGuardadas);
         solicitudesGuardadas.stream()
