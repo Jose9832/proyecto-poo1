@@ -1,3 +1,4 @@
 id;fecha;pasajero;direccion;telefono;tipo;distanciaKm;estado;conductor;placa;costo
-
-
+1;2026-05-15 18:55;Ana Torres;Calle 10 #20-30;3001234567;ESTANDAR;4.5;FINALIZADA;Laura Perez;TAX-101;16250
+2;2026-05-15 20:47;Carlos Rodriguez;Carrera 5 #12-45;3157894523;CARGA;4.0;ASIGNADA;Marta Diaz;CAR-303;20250
+3;2026-05-26 06:00;juan hernandes;calle 9 58a-52;31475869547;ESTANDAR;4.9;EN_ESPERA;;;0
