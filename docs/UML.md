@@ -106,3 +106,5 @@ Descripción de elementos:
 Uso sugerido:
 - Incluir este bloque PlantUML en la documentación para generar el diagrama.
 - Complementar con diagramas de secuencia o de estados según sea necesario.
+
+![alt text](image.png)
