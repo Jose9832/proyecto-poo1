@@ -20,6 +20,7 @@ El sistema modela una cooperativa de taxis que recibe solicitudes de pasajeros, 
 - **SOLID**: las responsabilidades estan separadas entre UI, gestor, repositorio, fabrica y estrategia de tarifa.
 - **Patron de diseno principal**: Factory Method/Simple Factory en `ServicioTaxiFactory`.
 - **Patron adicional**: Strategy en `TarifaStrategy`.
+- **Patron adicional**: Facade en `GestorSolicitudes`.  
 - **Excepciones personalizadas**: `DatosInvalidosException`, `SolicitudNoEncontradaException` y `ConductorNoDisponibleException`.
 - **Persistencia**: `ArchivoSolicitudRepository` guarda y carga solicitudes desde CSV.
 - **Interfaz de usuario**: ventana grafica con `JFrame`, formulario, botones y tablas.
@@ -32,6 +33,7 @@ El sistema modela una cooperativa de taxis que recibe solicitudes de pasajeros, 
 - `src/com/cooperativa/taxi/model`: entidades del dominio.
 - `src/com/cooperativa/taxi/factory/ServicioTaxiFactory.java`: patron Factory.
 - `src/com/cooperativa/taxi/pricing/TarifaStrategy.java`: patron Strategy.
+- `src/com/cooperativa/taxi/Facade/GestorSolicitudes`
 - `src/com/cooperativa/taxi/repository/ArchivoSolicitudRepository.java`: persistencia.
 - `src/com/cooperativa/taxi/ui/Consola.java`: menu interactivo.
 - `src/com/cooperativa/taxi/ui/swing/VentanaPrincipal.java`: interfaz grafica Swing/JFrame.
@@ -41,4 +43,15 @@ El sistema modela una cooperativa de taxis que recibe solicitudes de pasajeros, 
 ```powershell
 javac -d out (Get-ChildItem -Recurse -Filter *.java src).FullName
 java -cp out com.cooperativa.taxi.Main
+
+"Nota: Para sistemas basados en Unix (Linux/macOS), utilice javac -d out src/com/cooperativa/taxi/*.java y java -cp out com.cooperativa.taxi.Main."
+```
+
+
+## Equipo de trabajo
+```
+- José Luis Meza Quintana
+- Harold Dil Anthony Peñaranda 
+- Aidan Loaiza 
+-Juan Diego Agamez 
 ```

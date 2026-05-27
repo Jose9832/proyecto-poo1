@@ -2,7 +2,6 @@ package com.cooperativa.taxi.model;
 
 public enum TipoServicio {
     ESTANDAR("Taxi estandar"),
-    COMPARTIDO("Taxi compartido"),
     CARGA("Taxi de carga"),
     MASCOTAS("Taxi mascotas");
 

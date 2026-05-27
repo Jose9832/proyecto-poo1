@@ -142,12 +142,12 @@ public class Consola {
         System.out.println("Tipo de servicio:");
         System.out.println("1. Taxi estandar");
         System.out.println("2. Taxi de carga (Baul/Parrilla)");
-        System.out.println("3. Taxi para mascotas"); // Se actualizó el menú
+        System.out.println("3. Taxi para mascotas");
         int opcion = leerEntero("Seleccione tipo: ");
         return switch (opcion) {
             case 1 -> TipoServicio.ESTANDAR;
             case 2 -> TipoServicio.CARGA;
-            case 3 -> TipoServicio.MASCOTAS; // Se actualizó el switch
+            case 3 -> TipoServicio.MASCOTAS;
             default -> throw new DatosInvalidosException("Tipo de servicio no valido.");
         };
     }
